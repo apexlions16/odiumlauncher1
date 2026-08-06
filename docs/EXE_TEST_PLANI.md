@@ -6,7 +6,7 @@ Bu belge, Windows EXE testlerini aşama aşama yürütmek için hazırlanmışt�
 
 ## Aşama 1 — Dosya güvenliği ve ilk açılış
 
-Önce `Odium-Launcher-0.2.0-test.1-x64-portable.exe` dosyasını deneyin.
+Önce `Odium-Launcher-0.2.0-test.1-x64-Portable.exe` dosyasını deneyin.
 
 1. EXE'yi boş bir klasöre koyun.
 2. Windows Defender ile dosyayı taratın.
@@ -20,7 +20,7 @@ Beklenen sonuç: Uygulama çökmeden açılır, arayüz görünür ve ikinci aç
 
 ## Aşama 2 — Kurulumlu sürüm
 
-`Odium-Launcher-0.2.0-test.1-x64-nsis.exe` dosyasını çalıştırın.
+`Odium-Launcher-0.2.0-test.1-x64-Setup.exe` dosyasını çalıştırın.
 
 1. Özel kurulum klasörü seçilebildiğini kontrol edin.
 2. Masaüstü ve Başlat menüsü kısayollarını kontrol edin.
@@ -99,7 +99,7 @@ Not: Mağaza istemcileri oyuna sonradan eklenen ekstra dosyaları her zaman silm
 
 ## Hata bildirirken gönderilecekler
 
-- Hangi EXE kullanıldı: portable veya NSIS
+- Hangi EXE kullanıldı: Portable veya Setup
 - Windows sürümü
 - Hangi aşamada hata oluştu
 - Tam hata mesajı ve ekran görüntüsü
@@ -110,4 +110,4 @@ Not: Mağaza istemcileri oyuna sonradan eklenen ekstra dosyaları her zaman silm
 
 ## İlk testte önerilen sıra
 
-`Portable açılış → responsive arayüz → NSIS kurulum/kaldırma → oyun tespiti → küçük test paketi → kaldırma → güncelleme → VDS fallback`
+`Portable açılış → responsive arayüz → Setup kurulum/kaldırma → oyun tespiti → küçük test paketi → kaldırma → güncelleme → VDS fallback`
