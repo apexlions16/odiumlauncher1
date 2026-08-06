@@ -18,15 +18,8 @@
       "heroImage": "/assets/example-hero.jpg",
       "coverImage": "/assets/example-cover.jpg",
       "tags": ["Türkçe Dublaj"],
-      "launcherExclusive": {
-        "enabled": true,
-        "label": "Launcher'a Özel",
-        "until": null
-      },
-      "platforms": {
-        "steam": { "appId": "000000", "executable": "Game.exe" },
-        "epic": null
-      },
+      "launcherExclusive": { "enabled": true, "label": "Launcher'a Özel", "until": null },
+      "platforms": { "steam": { "appId": "000000", "executable": "Game.exe" }, "epic": null },
       "release": null
     }
   ],
