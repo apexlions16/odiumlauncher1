@@ -1,6 +1,6 @@
 {
   "name": "odium-launcher-suite",
-  "version": "0.1.0",
+  "version": "0.2.0-test.1",
   "private": true,
   "description": "Odium Stüdyo launcher, publishing server and administration tools.",
   "workspaces": [
@@ -12,7 +12,8 @@
     "test": "node --test tests/*.test.js",
     "admin": "node admin/server.js",
     "manifest": "node tools/build-manifest.js",
-    "check": "node --check launcher/main.js && node --check launcher/preload.js && node --check launcher/src/renderer.js && node --check admin/server.js && npm test"
+    "check": "node --check launcher/main.js && node --check launcher/preload.js && node --check launcher/src/renderer.js && node --check admin/server.js && npm test",
+    "dist:win": "npm --workspace launcher run dist"
   },
   "engines": {
     "node": ">=20"
