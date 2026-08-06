@@ -2,6 +2,8 @@ name: Build Windows EXE
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "17,47 * * * *"
   push:
     branches:
       - main
@@ -35,6 +37,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -79,7 +83,7 @@ jobs:
           retention-days: 30
 
       - name: Publish test release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name != 'pull_request'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v0.2.0-test.1
@@ -101,3 +105,45 @@ jobs:
             release/*.exe
             release/SHA256SUMS.txt
           fail_on_unmatched_files: true
+
+      - name: Record successful release metadata
+        if: github.event_name != 'pull_request'
+        shell: pwsh
+        run: |
+          $setup = Get-ChildItem -Path release -Filter "*-Setup.exe" -File | Select-Object -First 1
+          $portable = Get-ChildItem -Path release -Filter "*-Portable.exe" -File | Select-Object -First 1
+          if (-not $setup -or -not $portable) {
+            throw "Release metadata için EXE dosyaları bulunamadı."
+          }
+          $setupHash = (Get-FileHash -Path $setup.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+          $portableHash = (Get-FileHash -Path $portable.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+          $releaseBase = "https://github.com/${{ github.repository }}/releases/download/v0.2.0-test.1"
+          $metadata = [ordered]@{
+            status = "success"
+            version = "0.2.0-test.1"
+            platform = "windows-x64"
+            builtAt = (Get-Date).ToUniversalTime().ToString("o")
+            runId = "${{ github.run_id }}"
+            sourceCommit = "${{ github.sha }}"
+            releasePage = "https://github.com/${{ github.repository }}/releases/tag/v0.2.0-test.1"
+            setup = [ordered]@{
+              name = $setup.Name
+              sha256 = $setupHash
+              url = "$releaseBase/$($setup.Name)"
+            }
+            portable = [ordered]@{
+              name = $portable.Name
+              sha256 = $portableHash
+              url = "$releaseBase/$($portable.Name)"
+            }
+            checksums = "$releaseBase/SHA256SUMS.txt"
+          }
+          New-Item -ItemType Directory -Path builds -Force | Out-Null
+          $metadata | ConvertTo-Json -Depth 5 | Set-Content -Path builds/latest.json -Encoding utf8
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add builds/latest.json
+          if (-not (git diff --cached --quiet)) {
+            git commit -m "build: record Windows test release"
+            git push origin HEAD:main
+          }
