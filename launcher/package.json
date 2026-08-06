@@ -1,6 +1,6 @@
 {
   "name": "@odium/launcher",
-  "version": "0.1.0",
+  "version": "0.2.0-test.1",
   "private": true,
   "main": "main.js",
   "type": "commonjs",
@@ -18,9 +18,29 @@
     "appId": "com.odiumstudio.launcher",
     "productName": "Odium Launcher",
     "asar": true,
-    "files": ["main.js", "preload.js", "src/**/*", "package.json"],
-    "directories": { "output": "../release" },
-    "win": { "target": ["nsis", "portable"], "artifactName": "Odium-Launcher-${version}-${arch}.${ext}" },
-    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true, "createDesktopShortcut": true, "createStartMenuShortcut": true }
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "../release"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "artifactName": "Odium-Launcher-${version}-${arch}-${target}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Odium Launcher",
+      "uninstallDisplayName": "Odium Launcher"
+    }
   }
 }
