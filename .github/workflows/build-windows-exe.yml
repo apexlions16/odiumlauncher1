@@ -1,0 +1,95 @@
+name: Build Windows EXE
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "launcher/**"
+      - "tests/**"
+      - "package.json"
+      - ".github/workflows/build-windows-exe.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: odium-windows-test-build
+  cancel-in-progress: true
+
+jobs:
+  build-windows:
+    name: Test and package Windows x64
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          npm config set fund false
+          npm config set audit false
+          npm install
+
+      - name: Run automated checks
+        run: npm run check
+
+      - name: Build NSIS and portable EXE
+        run: npm run dist:win
+
+      - name: Generate SHA-256 checksums
+        shell: pwsh
+        run: |
+          $files = Get-ChildItem -Path release -Filter *.exe -File
+          if ($files.Count -lt 2) {
+            throw "Beklenen iki EXE üretilemedi. Bulunan: $($files.Count)"
+          }
+          $lines = foreach ($file in $files) {
+            $hash = (Get-FileHash -Path $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+            "$hash  $($file.Name)"
+          }
+          $lines | Set-Content -Path release/SHA256SUMS.txt -Encoding utf8
+          Get-ChildItem -Path release | Format-Table Name, Length, LastWriteTime
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Odium-Launcher-0.2.0-test.1-Windows-x64
+          path: |
+            release/*.exe
+            release/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish test release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v0.2.0-test.1
+          target_commitish: main
+          name: Odium Launcher 0.2.0 Test 1
+          prerelease: true
+          draft: false
+          generate_release_notes: false
+          body: |
+            Bu sürüm ilk Windows saha testi içindir ve kod imzalı değildir.
+
+            Dosyalar:
+            - Setup: Windows'a kurulur, masaüstü/Başlat menüsü kısayolu oluşturur.
+            - Portable: Kurulum yapmadan doğrudan çalışır.
+            - SHA256SUMS.txt: İndirilen dosyanın bütünlüğünü doğrulamak içindir.
+
+            Test sırası için `docs/EXE_TEST_PLANI.md` belgesini izleyin.
+          files: |
+            release/*.exe
+            release/SHA256SUMS.txt
+          fail_on_unmatched_files: true
