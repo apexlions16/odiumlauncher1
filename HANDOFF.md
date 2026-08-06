@@ -14,142 +14,109 @@ Odium Stüdyo'nun kendi hazırladığı Türkçe dublajları, resmî Steam/Epic 
 
 **Durum: Tamamlandı**
 
-- Boş depo için monorepo yapısı oluşturuldu.
-- Masaüstü launcher için Electron, sunucu için bağımsız Node.js mimarisi seçildi.
-- Katalog ve sürüm manifesti JSON şemaları tanımlandı.
-- Oyun/haber/sürüm verilerinin EXE içine gömülmemesi kararlaştırıldı.
-- Launcher kullanıcıları için hesap sistemi eklenmedi.
-- Admin işlemleri `ODIUM_ADMIN_TOKEN` ile ayrıldı.
+- Electron launcher, bağımsız Node.js admin/yayın servisi ve manifest tabanlı güncelleme mimarisi kuruldu.
+- Oyun, haber, görsel ve sürüm verileri EXE'den bağımsız uzak katalogdan yönetiliyor.
+- Launcher kullanıcıları için login sistemi eklenmedi; admin işlemleri token ile ayrıldı.
 
 ### Aşama 1 — Launcher çekirdeği ve arayüz
 
 **Durum: Tamamlandı**
 
-- Modern, koyu Odium arayüzü ve dar ekranlara uyarlanan responsive düzen.
-- Oyun kütüphanesi, detay sayfası, haberler, ayarlar ve kurulum ilerleme ekranı.
-- Steam registry + `libraryfolders.vdf` + `appmanifest_<appid>.acf` tespiti.
+- Modern, koyu ve responsive Odium arayüzü.
+- Steam registry, `libraryfolders.vdf` ve `appmanifest_<appid>.acf` tespiti.
 - Epic `.item` manifest taraması.
-- Uzak katalog ve çevrimdışı katalog önbelleği.
-- Sürüm manifesti alma ve güvenli göreli yol doğrulaması.
-- Dosya boyutu + SHA-256 ile kurulu/güncel/onarım/güncelleme tespiti.
+- Uzak katalog ve çevrimdışı önbellek.
+- Dosya boyutu + SHA-256 ile kurulum/güncelleme/onarım tespiti.
 - Dosya bazında VDS birincil, Hugging Face ikincil kaynak geçişi.
-- Staging klasörüne indirme, hash doğrulama, orijinal dosya yedekleme ve güvenli uygulama.
-- Dublaj kaldırma ve orijinal dosyaları geri yükleme.
-- Oyun doğrulaması dublajı geri aldıktan sonra stale kurulum kaydını otomatik temizleme.
-- Launcher'a özel rozet ve uzaktan yönetilen marka vurgu rengi.
+- Staging, hash doğrulama, orijinal dosya yedekleme, kaldırma ve geri yükleme.
+- Oyun doğrulaması dublajı geri aldığında stale kurulum kaydını temizleme.
 
 ### Aşama 2 — Admin paneli ve VDS yayın servisi
 
 **Durum: Tamamlandı**
 
 - Token korumalı responsive web admin paneli.
-- Oyun ekleme/düzenleme/silme.
-- Steam App ID, Epic App Name, çalıştırılabilir dosya, açıklama, kapak ve hero görseli yönetimi.
-- Launcher görünürlüğü ve launcher'a özel rozet yönetimi.
-- Haber oluşturma, görsel yükleme, öne çıkarma ve silme.
-- Marka adı, site, destek URL'si ve vurgu rengi yönetimi.
-- Dublaj klasörünü alt klasör yapısını koruyarak VDS'e yükleme.
-- Sunucuda otomatik SHA-256 manifest üretimi.
-- Aktif sürümü ve yayın notlarını katalogda yayınlama.
-- Hugging Face yedek klasör URL'sini sürüme bağlama.
-- Herkese açık katalog, manifest, görsel ve indirme uç noktaları.
+- Oyun, Steam/Epic kimlikleri, açıklama, kapak, hero, görünürlük ve launcher'a özel rozet yönetimi.
+- Haber ve marka yönetimi.
+- Klasör yapısını koruyan dublaj yükleme.
+- Sunucuda otomatik SHA-256 manifest üretimi ve aktif sürüm yayınlama.
+- Hugging Face yedek URL'sini sürüme bağlama.
 - Docker, systemd ve Nginx dağıtım örnekleri.
 
 ### Aşama 3 — Test, güvenlik ve dokümantasyon
 
 **Durum: Tamamlandı**
 
-- Node.js yerleşik test sistemiyle 7 çekirdek test.
-- Test edilenler: VDF ayrıştırma, yol kaçışı engeli, manifest üretimi, kaynak fallback, kurulum/kaldırma, yedek geri yükleme ve oyun doğrulamasından sonra durum temizleme.
-- `npm run check` yerel çalışma ortamında başarıyla tamamlandı.
-- Admin sunucusu katalog, dosya yükleme, yayınlama ve manifest indirme akışı yerel entegrasyon testiyle doğrulandı.
-- GitHub Actions CI eklendi.
-- Mimari, VDS dağıtımı, admin kullanımı, güvenlik/sahiplik sınırları ve yol haritası belgeleri eklendi.
+- 7 çekirdek otomatik test geçti.
+- VDF ayrıştırma, yol kaçışı engeli, manifest üretimi, kaynak fallback, kurulum/kaldırma, yedek geri yükleme ve doğrulama sonrası durum temizleme test edildi.
+- Admin katalog/yükleme/yayınlama akışı yerel entegrasyon testiyle doğrulandı.
+- CI, mimari, VDS kurulumu ve admin kullanım belgeleri eklendi.
 
-### Aşama 4 — Windows EXE üretimi ve saha test planı
+### Aşama 4 — Windows paketleme sistemi
 
-**Durum: Derleme hattı hazır, ilk Windows build sonucu bekleniyor**
+**Durum: Paketleme yapılandırması hazır; GitHub Actions koşusu oluşmadığı için tam Electron Setup/Portable çıktısı henüz doğrulanmadı**
 
-- Launcher ve monorepo sürümü `0.2.0-test.1` olarak ayrıldı.
-- `windows-latest` üzerinde çalışan `Build Windows EXE` GitHub Actions iş akışı eklendi.
-- Her build öncesinde otomatik test ve sözdizimi kontrolleri çalıştırılıyor.
-- x64 NSIS kurulum dosyası üretiliyor: `Odium-Launcher-0.2.0-test.1-x64-Setup.exe`.
-- x64 taşınabilir dosya üretiliyor: `Odium-Launcher-0.2.0-test.1-x64-Portable.exe`.
-- EXE dosyaları için `SHA256SUMS.txt` oluşturuluyor.
-- Başarılı build, 30 günlük Actions artifact'ı ve `v0.2.0-test.1` ön sürüm release'i olarak yayınlanacak.
-- Kullanıcının adım adım uygulayacağı test rehberi `docs/EXE_TEST_PLANI.md` dosyasına yazıldı.
+- Sürüm `0.2.0-test.1` olarak ayrıldı.
+- Hedef çıktılar:
+  - `Odium-Launcher-0.2.0-test.1-x64-Setup.exe`
+  - `Odium-Launcher-0.2.0-test.1-x64-Portable.exe`
+- `.github/workflows/build-windows-exe.yml` Windows x64 test, build, SHA-256, artifact ve prerelease yayınlama işlerini içeriyor.
+- Push ve PR tetiklemeleri denendi ancak GitHub hiçbir Actions koşusu oluşturmadı. Depo Actions ayarının GitHub arayüzünden etkinleştirilmesi veya workflow'un elle çalıştırılması gerekebilir.
+- Actions'a bağımlı olmayan yerel build yolu eklendi:
+  - Depo kökündeki `BUILD_WINDOWS_EXE.bat` çift tıklanır.
+  - `tools/build-windows-exe.ps1` Node/npm kontrolü, kurulum, otomatik test, Setup/Portable paketleme ve SHA-256 üretimini yürütür.
+
+### Aşama 4A — Yerel Windows x64 smoke-test EXE
+
+**Durum: Üretildi ve statik olarak doğrulandı; kullanıcı cihazı testi bekleniyor**
+
+- Dosya: `Odium-Launcher-0.2.0-test.1-x64-SmokeTest.exe`
+- SHA-256: `87b9db21aa41292d39ac44f0e16a9cb5691c546f97eb7c298a682de9c29a8d6d`
+- PE türü: Windows x64 GUI (`PE32+`, `pei-x86-64`).
+- Yalnızca standart Windows DLL'lerini kullanır: `kernel32`, `user32`, `gdi32`, `advapi32`, `shell32`.
+- Koyu Odium test arayüzü açar.
+- Steam kurulum yolunu Windows kayıt defterinden kontrol eder.
+- Ana Steam kütüphanesindeki `appmanifest_*.acf` sayısını gösterir.
+- Epic manifest klasörünü ve `.item` sayısını kontrol eder.
+- Steam/Epic klasörlerini ve `odiumtr.com` sitesini açan düğmeler içerir.
+- Bu smoke-test VDS'ye bağlanmaz, dublaj indirmez ve oyun dosyalarını değiştirmez.
+- Çalışma ortamında Windows/Wine bulunmadığından dinamik çalıştırma yapılamadı; mimari, giriş noktası ve import tablosu statik olarak doğrulandı.
+
+## İlk kullanıcı testi
+
+1. Önce smoke-test EXE'yi Windows Defender ile tarat.
+2. Açılışta SmartScreen çıkarsa ekran görüntüsü al; sürüm kod imzalı değildir.
+3. Arayüz, yazılar ve pencere büyütme/küçültmeyi kontrol et.
+4. Steam/Epic yollarının doğru bulunup bulunmadığını kontrol et.
+5. `Yeniden Tara`, `Steam Klasörü`, `Epic Manifestleri` ve `odiumtr.com` düğmelerini dene.
+6. Sonucu ve ekran görüntüsünü paylaş.
+7. Bu test geçince gerçek Electron paketi için `BUILD_WINDOWS_EXE.bat` çalıştırılacak veya GitHub Actions etkinleştirilecek.
+
+Detaylı tam launcher testleri: `docs/EXE_TEST_PLANI.md`.
 
 ## Kritik sahiplik kararı
 
-Hesap girişi istemeyen üçüncü taraf bir launcher, yalnızca Steam/Epic'in yerel resmî kurulum manifestlerini doğrulayabilir. Bu, resmî istemci kurulumu için güçlü bir yerel kanıttır fakat kullanıcının lisansını kriptografik olarak kesin doğrulamaz.
-
-Kesin sahiplik istenirse sonraki aşamada:
-
-- Steam OpenID veya Steamworks auth ticket + güvenli sunucuda `CheckAppOwnership`,
-- Epic Account Services / EOS entitlement doğrulaması
-
-eklenmelidir. Yayıncı anahtarları kesinlikle launcher EXE içine konulmamalıdır.
-
-## Çalıştırma
-
-### Admin sunucusu
-
-```bash
-export ODIUM_PUBLIC_BASE_URL=https://launcher.odiumtr.com
-export ODIUM_ADMIN_TOKEN="uzun-rastgele-token"
-export ODIUM_DATA_DIR=/var/lib/odium-launcher
-node admin/server.js
-```
-
-### Launcher geliştirme
-
-```bash
-npm install
-npm run dev
-```
-
-### Windows EXE üretimi
-
-```powershell
-npm install
-npm run check
-npm run dist:win
-```
-
-GitHub üzerinde `.github/workflows/build-windows-exe.yml` dosyası aynı işlemi Windows runner'da otomatik gerçekleştirir.
-
-## EXE test sırası
-
-1. Portable EXE ilk açılış ve responsive arayüz.
-2. Setup EXE kurulum, kısayol ve kaldırma.
-3. Steam/Epic oyun tespiti.
-4. Küçük ve geri alınabilir test paketi kurulumu.
-5. Dublaj kaldırma ve orijinal dosya geri yükleme.
-6. Yeni manifest sürümüyle güncelleme tespiti.
-7. VDS kapalıyken Hugging Face fallback.
-8. Steam/Epic dosya doğrulamasından sonra yeniden indirme durumu.
-
-Detaylı yönergeler: `docs/EXE_TEST_PLANI.md`.
+Hesap girişi istemeyen üçüncü taraf launcher yalnızca Steam/Epic'in yerel resmî kurulum manifestlerini doğrulayabilir. Bu, resmî istemci kurulumu için güçlü yerel kanıttır ancak hesabın lisansını kriptografik olarak kesin kanıtlamaz. Kesin doğrulama istenirse Steamworks/OpenID veya Epic Account Services doğrulaması güvenli sunucu tarafında eklenmelidir.
 
 ## Üretimden önce gereken bilgiler
 
-1. VDS'in kesin alan adı veya HTTPS URL'si.
-2. İlk eklenecek oyunların Steam App ID ve/veya Epic App Name değerleri.
-3. Her oyunun gerçek kurulum köküne göre hazırlanmış dublaj klasörü.
-4. Hugging Face yedek depo ve `resolve` klasör URL'leri.
-5. Odium logo dosyaları, kapaklar ve hero görselleri.
-6. Windows uygulama kod imzalama sertifikası varsa sertifika bilgileri.
+1. VDS'in kesin HTTPS adresi.
+2. İlk oyunların Steam App ID ve/veya Epic App Name değerleri.
+3. Kurulum köküne göre hazırlanmış gerçek dublaj klasörü.
+4. Hugging Face yedek `resolve` URL'leri.
+5. Odium logo, kapak ve hero görselleri.
+6. Varsa Windows kod imzalama sertifikası.
 
 ## Bilinen sınırlar
 
-- İlk test EXE'leri kod imzalı değildir; Windows SmartScreen uyarısı görülebilir.
-- Gerçek Windows Steam/Epic kurulumlarıyla saha testi kullanıcı cihazında yapılacaktır.
-- Hugging Face'e otomatik aynalama henüz yok; panel sürüme yedek URL bağlar.
-- İndirme duraklat/devam ettir ve paralel parça indirme sonraki aşamaya bırakıldı.
-- Steam/Epic “dosyaları doğrula” işlemi sonradan eklenmiş ekstra dosyaları her zaman silmeyebilir. Tam kaldırma için launcher'daki kaldırma düğmesi güvenilir yoldur.
+- Smoke-test final launcher değildir; yalnızca Windows açılışı ve istemci tespitini doğrular.
+- İlk EXE kod imzalı değildir, bu nedenle SmartScreen uyarısı görülebilir.
+- Gerçek Steam/Epic saha testi kullanıcı cihazında yapılacaktır.
+- Hugging Face'e otomatik aynalama henüz yoktur; panel yedek URL bağlar.
+- İndirme duraklat/devam ettir ve paralel parça indirme sonraki aşamadadır.
 
-## Sıradaki önerilen çalışma
+## Sıradaki çalışma
 
-**Aşama 5: İlk EXE saha testindeki hataları düzeltmek, gerçek VDS adresini bağlamak, ilk oyunu admin paneline eklemek ve gerçek dublaj klasörüyle uçtan uca kurulum testi yapmak.**
+**Aşama 5: Smoke-test sonucuna göre Windows uyumluluk sorunlarını düzeltmek; ardından gerçek Electron Setup/Portable EXE'lerini üretip ilk oyunu VDS ve Hugging Face kaynaklarıyla uçtan uca test etmek.**
 
 Bu dosya her tamamlanan geliştirme aşamasından sonra güncellenmeye devam etmelidir.
