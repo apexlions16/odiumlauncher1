@@ -10,12 +10,20 @@ on:
       - "tests/**"
       - "package.json"
       - ".github/workflows/build-windows-exe.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "launcher/**"
+      - "tests/**"
+      - "package.json"
+      - ".github/workflows/build-windows-exe.yml"
 
 permissions:
   contents: write
 
 concurrency:
-  group: odium-windows-test-build
+  group: odium-windows-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
