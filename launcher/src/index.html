@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https: http:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' https: http:; font-src 'self' data:;">
+  <title>Odium Launcher</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <button class="brand" id="brandButton" aria-label="Odium ana sayfa"><span class="brand-mark">O</span><span class="brand-copy"><strong>ODIUM</strong><small>STÜDYO</small></span></button>
+      <nav class="nav-list" aria-label="Ana menü">
+        <button class="nav-item active" data-view="library"><span class="nav-icon">▦</span><span>Kütüphane</span></button>
+        <button class="nav-item" data-view="news"><span class="nav-icon">◫</span><span>Haberler</span></button>
+      </nav>
+      <div class="sidebar-section"><div class="section-label"><span>OYUNLAR</span><span id="gameCount">0</span></div><div id="gameNav" class="game-nav"></div></div>
+      <div class="sidebar-footer">
+        <div class="connection-card" id="connectionCard"><span class="status-dot"></span><span><strong id="connectionTitle">Bağlanıyor</strong><small id="connectionText">Katalog kontrol ediliyor</small></span></div>
+        <button class="nav-item" id="settingsButton"><span class="nav-icon">⚙</span><span>Ayarlar</span></button>
+      </div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar"><div><p class="eyebrow" id="pageEyebrow">ODIUM KÜTÜPHANESİ</p><h1 id="pageTitle">Türkçe dublajlarınız</h1></div><div class="top-actions"><button class="icon-button" id="refreshButton" title="Yenile">↻</button><button class="site-button" id="websiteButton"><span>odiumtr.com</span><span>↗</span></button></div></header>
+      <section id="content" class="content" aria-live="polite"><div class="skeleton hero-skeleton"></div><div class="card-grid"><div class="skeleton card-skeleton"></div><div class="skeleton card-skeleton"></div></div></section>
+    </main>
+  </div>
+  <div class="toast-stack" id="toastStack"></div>
+  <dialog id="settingsDialog" class="modal">
+    <form method="dialog" class="modal-card" id="settingsForm">
+      <div class="modal-heading"><div><p class="eyebrow">UYGULAMA</p><h2>Ayarlar</h2></div><button value="cancel" class="icon-button">×</button></div>
+      <label class="field"><span>Katalog adresi</span><input id="catalogUrlInput" type="url" required placeholder="https://launcher.odiumtr.com/api/public/catalog.json"><small>Oyunlar, haberler ve yayın bilgileri bu adresten alınır.</small></label>
+      <label class="field"><span>Güncelleme kanalı</span><select id="updateChannelInput"><option value="stable">Kararlı</option><option value="preview">Ön izleme</option></select></label>
+      <div class="modal-actions"><button value="cancel" class="button ghost">Vazgeç</button><button value="default" class="button primary">Kaydet ve yenile</button></div>
+    </form>
+  </dialog>
+  <div class="operation-overlay hidden" id="operationOverlay"><div class="operation-card"><div class="operation-orbit"></div><p class="eyebrow">DUBLAJ İŞLEMİ</p><h2 id="operationTitle">Dosyalar hazırlanıyor</h2><p id="operationFile">Lütfen uygulamayı kapatmayın.</p><div class="progress-track"><div id="operationProgress" class="progress-value"></div></div><div class="progress-meta"><span id="operationPercent">0%</span><span id="operationBytes">0 MB / 0 MB</span></div></div></div>
+  <script src="renderer.js"></script>
+</body>
+</html>
