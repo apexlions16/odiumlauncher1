@@ -2,7 +2,7 @@
 
 Son güncelleme: 6 Ağustos 2026  
 Depo: `apexlions16/odiumlauncher1`  
-Aktif temel sürüm: `0.1.0`
+Aktif test sürümü: `0.2.0-test.1`
 
 ## Projenin amacı
 
@@ -66,6 +66,19 @@ Odium Stüdyo'nun kendi hazırladığı Türkçe dublajları, resmî Steam/Epic 
 - GitHub Actions CI eklendi.
 - Mimari, VDS dağıtımı, admin kullanımı, güvenlik/sahiplik sınırları ve yol haritası belgeleri eklendi.
 
+### Aşama 4 — Windows EXE üretimi ve saha test planı
+
+**Durum: Derleme hattı hazır, ilk Windows build sonucu bekleniyor**
+
+- Launcher ve monorepo sürümü `0.2.0-test.1` olarak ayrıldı.
+- `windows-latest` üzerinde çalışan `Build Windows EXE` GitHub Actions iş akışı eklendi.
+- Her build öncesinde otomatik test ve sözdizimi kontrolleri çalıştırılıyor.
+- x64 NSIS kurulum dosyası üretiliyor: `Odium-Launcher-0.2.0-test.1-x64-Setup.exe`.
+- x64 taşınabilir dosya üretiliyor: `Odium-Launcher-0.2.0-test.1-x64-Portable.exe`.
+- EXE dosyaları için `SHA256SUMS.txt` oluşturuluyor.
+- Başarılı build, 30 günlük Actions artifact'ı ve `v0.2.0-test.1` ön sürüm release'i olarak yayınlanacak.
+- Kullanıcının adım adım uygulayacağı test rehberi `docs/EXE_TEST_PLANI.md` dosyasına yazıldı.
+
 ## Kritik sahiplik kararı
 
 Hesap girişi istemeyen üçüncü taraf bir launcher, yalnızca Steam/Epic'in yerel resmî kurulum manifestlerini doğrulayabilir. Bu, resmî istemci kurulumu için güçlü bir yerel kanıttır fakat kullanıcının lisansını kriptografik olarak kesin doğrulamaz.
@@ -100,8 +113,23 @@ npm run dev
 ```powershell
 npm install
 npm run check
-npm --workspace launcher run dist
+npm run dist:win
 ```
+
+GitHub üzerinde `.github/workflows/build-windows-exe.yml` dosyası aynı işlemi Windows runner'da otomatik gerçekleştirir.
+
+## EXE test sırası
+
+1. Portable EXE ilk açılış ve responsive arayüz.
+2. Setup EXE kurulum, kısayol ve kaldırma.
+3. Steam/Epic oyun tespiti.
+4. Küçük ve geri alınabilir test paketi kurulumu.
+5. Dublaj kaldırma ve orijinal dosya geri yükleme.
+6. Yeni manifest sürümüyle güncelleme tespiti.
+7. VDS kapalıyken Hugging Face fallback.
+8. Steam/Epic dosya doğrulamasından sonra yeniden indirme durumu.
+
+Detaylı yönergeler: `docs/EXE_TEST_PLANI.md`.
 
 ## Üretimden önce gereken bilgiler
 
@@ -114,14 +142,14 @@ npm --workspace launcher run dist
 
 ## Bilinen sınırlar
 
-- Bu çalışma ortamında Electron paketi indirilemediği için Windows EXE üretilmedi; kaynak kod, paketleme ayarı ve NSIS/portable hedefleri hazırdır.
-- Gerçek Windows Steam/Epic kurulumlarıyla saha testi henüz yapılmadı.
+- İlk test EXE'leri kod imzalı değildir; Windows SmartScreen uyarısı görülebilir.
+- Gerçek Windows Steam/Epic kurulumlarıyla saha testi kullanıcı cihazında yapılacaktır.
 - Hugging Face'e otomatik aynalama henüz yok; panel sürüme yedek URL bağlar.
 - İndirme duraklat/devam ettir ve paralel parça indirme sonraki aşamaya bırakıldı.
 - Steam/Epic “dosyaları doğrula” işlemi sonradan eklenmiş ekstra dosyaları her zaman silmeyebilir. Tam kaldırma için launcher'daki kaldırma düğmesi güvenilir yoldur.
 
 ## Sıradaki önerilen çalışma
 
-**Aşama 4: Gerçek VDS adresini bağlama, ilk oyunu admin paneline ekleme, gerçek dublaj klasörüyle Windows üzerinde uçtan uca test ve ilk imzalı/dağıtılabilir EXE üretimi.**
+**Aşama 5: İlk EXE saha testindeki hataları düzeltmek, gerçek VDS adresini bağlamak, ilk oyunu admin paneline eklemek ve gerçek dublaj klasörüyle uçtan uca kurulum testi yapmak.**
 
 Bu dosya her tamamlanan geliştirme aşamasından sonra güncellenmeye devam etmelidir.
