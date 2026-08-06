@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://odiumtr.com/schemas/catalog.schema.json",
+  "title": "Odium public catalog",
+  "type": "object",
+  "required": ["schemaVersion", "generatedAt", "brand", "games", "news"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "brand": {
+      "type": "object",
+      "required": ["name", "website"],
+      "properties": {
+        "name": { "type": "string" },
+        "website": { "type": "string", "format": "uri" },
+        "supportUrl": { "type": "string", "format": "uri" },
+        "accent": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "games": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/game" }
+    },
+    "news": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/news" }
+    }
+  },
+  "$defs": {
+    "game": {
+      "type": "object",
+      "required": ["id", "slug", "title", "enabled", "platforms"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,63}$" },
+        "slug": { "type": "string" },
+        "title": { "type": "string" },
+        "enabled": { "type": "boolean" },
+        "description": { "type": "string" },
+        "shortDescription": { "type": "string" },
+        "heroImage": { "type": "string" },
+        "coverImage": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "launcherExclusive": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "label": { "type": "string" },
+            "until": { "type": ["string", "null"], "format": "date-time" }
+          }
+        },
+        "platforms": {
+          "type": "object",
+          "properties": {
+            "steam": {
+              "type": ["object", "null"],
+              "properties": {
+                "appId": { "type": "string" },
+                "executable": { "type": "string" }
+              }
+            },
+            "epic": {
+              "type": ["object", "null"],
+              "properties": {
+                "catalogItemId": { "type": "string" },
+                "appName": { "type": "string" },
+                "namespace": { "type": "string" },
+                "executable": { "type": "string" }
+              }
+            }
+          }
+        },
+        "release": { "$ref": "#/$defs/release" }
+      }
+    },
+    "release": {
+      "type": ["object", "null"],
+      "properties": {
+        "version": { "type": "string" },
+        "publishedAt": { "type": "string", "format": "date-time" },
+        "manifestUrl": { "type": "string" },
+        "primaryBaseUrl": { "type": "string" },
+        "fallbackBaseUrl": { "type": ["string", "null"] },
+        "changelog": { "type": "string" },
+        "size": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "news": {
+      "type": "object",
+      "required": ["id", "title", "publishedAt"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "summary": { "type": "string" },
+        "body": { "type": "string" },
+        "image": { "type": "string" },
+        "publishedAt": { "type": "string", "format": "date-time" },
+        "featured": { "type": "boolean" },
+        "gameId": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

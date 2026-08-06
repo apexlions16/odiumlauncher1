@@ -2,14 +2,17 @@
 
 Son güncelleme: 6 Ağustos 2026
 
-## Aşama 0 — Başlangıç
+## Aşama 0 — Depo ve mimari
 
-**Durum: Başlatıldı**
+**Durum: Tamamlandı**
 
-- Depo boş olarak teslim alındı.
-- Launcher, admin paneli ve VDS yayın servisi için temiz mimari kurulacak.
-- Her tamamlanan aşamada bu dosya güncellenecek.
+- Boş depo için monorepo yapısı oluşturuldu.
+- Launcher için Electron, admin/yayın sunucusu için bağımsız Node.js mimarisi seçildi.
+- Katalog ve sürüm manifesti şemaları tanımlandı.
+- Oyun, haber ve sürüm bilgilerinin EXE içine gömülmemesi kararlaştırıldı.
+- Launcher kullanıcıları için hesap sistemi olmayacak.
+- Admin yazma işlemleri token ile korunacak.
 
-## Sıradaki adım
+## Sıradaki aşama
 
-Depo yapısı, katalog sözleşmeleri ve temel proje ayarları.
+Aşama 1: Steam/Epic tespiti, VDS→Hugging Face indirme, dosya doğrulama, kurulum ve responsive launcher arayüzü.

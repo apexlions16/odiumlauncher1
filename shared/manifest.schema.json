@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://odiumtr.com/schemas/manifest.schema.json",
+  "title": "Odium dubbing release manifest",
+  "type": "object",
+  "required": ["schemaVersion", "gameId", "version", "generatedAt", "files"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "gameId": { "type": "string" },
+    "version": { "type": "string" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "size", "sha256"],
+        "properties": {
+          "path": { "type": "string" },
+          "contentPath": { "type": "string" },
+          "size": { "type": "integer", "minimum": 0 },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "mode": { "enum": ["replace", "add"] }
+        }
+      }
+    },
+    "deletions": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

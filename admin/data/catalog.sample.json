@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-06T18:00:00.000Z",
+  "brand": {
+    "name": "Odium Stüdyo",
+    "website": "https://odiumtr.com",
+    "supportUrl": "https://odiumtr.com",
+    "accent": "#d93b4a"
+  },
+  "games": [
+    {
+      "id": "ornek-oyun",
+      "slug": "ornek-oyun",
+      "title": "Örnek Oyun",
+      "enabled": false,
+      "shortDescription": "Admin panelinden gerçek oyun bilgileriyle değiştirin.",
+      "description": "Bu kayıt yalnızca katalog şemasını göstermek için devre dışı bırakılmış bir örnektir.",
+      "heroImage": "/assets/example-hero.jpg",
+      "coverImage": "/assets/example-cover.jpg",
+      "tags": ["Türkçe Dublaj"],
+      "launcherExclusive": {
+        "enabled": true,
+        "label": "Launcher'a Özel",
+        "until": null
+      },
+      "platforms": {
+        "steam": { "appId": "000000", "executable": "Game.exe" },
+        "epic": null
+      },
+      "release": null
+    }
+  ],
+  "news": []
+}
