@@ -1,0 +1,25 @@
+[Unit]
+Description=Odium Launcher Admin and Publishing Server
+After=network.target
+
+[Service]
+Type=simple
+User=odium
+Group=odium
+WorkingDirectory=/opt/odium-launcher
+Environment=ODIUM_ADMIN_HOST=127.0.0.1
+Environment=ODIUM_ADMIN_PORT=4178
+Environment=ODIUM_PUBLIC_BASE_URL=https://launcher.odiumtr.com
+Environment=ODIUM_DATA_DIR=/var/lib/odium-launcher
+EnvironmentFile=/etc/odium-launcher.env
+ExecStart=/usr/bin/node /opt/odium-launcher/admin/server.js
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/odium-launcher
+
+[Install]
+WantedBy=multi-user.target
