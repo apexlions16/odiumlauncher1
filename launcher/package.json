@@ -31,16 +31,19 @@
       "target": [
         "nsis",
         "portable"
-      ],
-      "artifactName": "Odium-Launcher-${version}-${arch}-${target}.${ext}"
+      ]
     },
     "nsis": {
+      "artifactName": "Odium-Launcher-${version}-${arch}-Setup.${ext}",
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "Odium Launcher",
       "uninstallDisplayName": "Odium Launcher"
+    },
+    "portable": {
+      "artifactName": "Odium-Launcher-${version}-${arch}-Portable.${ext}"
     }
   }
 }
